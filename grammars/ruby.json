@@ -31,7 +31,9 @@
     "Rantfile",
     "rb",
     "rbx",
-    "rjs",
+    // `.rjs` is deliberately absent: it is a Rails-only template format, and
+    // claiming it here tied with language-ruby-on-rails, which then lost the
+    // tie on enumeration order and never got its own file type.
     "ru",
     "ruby",
     "Schemafile",
