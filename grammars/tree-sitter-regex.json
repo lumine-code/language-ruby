@@ -1,6 +1,6 @@
 {
   "scopeName": "source.rb.regexp",
-  "type": "modern-tree-sitter",
+  "type": "tree-sitter",
   "parser": "tree-sitter-regex",
   "injectionRegex": "^(rb-regex)$",
   "treeSitter": {

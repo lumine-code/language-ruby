@@ -1,7 +1,7 @@
 {
   "name": "Ruby",
   "scopeName": "source.ruby",
-  "type": "modern-tree-sitter",
+  "type": "tree-sitter",
   "parser": "tree-sitter-ruby",
   "injectionRegex": "rb|ruby|RB|RUBY",
   "treeSitter": {
