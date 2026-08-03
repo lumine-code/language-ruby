@@ -8,6 +8,10 @@ Ruby language support.
 - **Syntax highlighting**: full grammar coverage for Ruby, ERB, Gemfiles, and embedded regular expressions.
 - **Snippets**: shortcuts for common Ruby constructs.
 
+## Installation
+
+To install `language-ruby` search for _language-ruby_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/language-ruby`.
+
 ## Services
 
 - **hyperlink.injection** (`^1.0.0`): consumed to highlight URLs inside Ruby files as clickable links.
