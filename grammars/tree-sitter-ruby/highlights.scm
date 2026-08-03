@@ -78,8 +78,8 @@
   (#match? @keyword.other.special-method._TEXT_.ruby "^(private|protected|public)$"))
 
 (call
-  method: [(identifier) (constant)] @keyword.other.special-method
-  (#match? @keyword.other.special-method "^(extend)$"))
+  method: [(identifier) (constant)] @keyword.other.special-method.ruby
+  (#match? @keyword.other.special-method.ruby "^(extend)$"))
 
 ; "Foo" and "Bar" in `class Zort < Foo::Bar`.
 (superclass
@@ -115,8 +115,8 @@
 
 ; Function calls
 
-((identifier) @keyword.other.special-method
- (#eq? @keyword.other.special-method "require"))
+((identifier) @keyword.other.special-method.ruby
+ (#eq? @keyword.other.special-method.ruby "require"))
 
 (unary
   "defined?" @keyword.other.defined.ruby)
@@ -127,15 +127,15 @@
 
 (singleton_method
   "." @keyword.operator.accessor.ruby
-  ) @meta.function.method.with-arguments
+  ) @meta.function.method.with-arguments.ruby
 
 (singleton_method
   name: (identifier) @entity.name.function.ruby
   (#set! capture.final "true"))
 
 (call
-  method: (identifier) @keyword.other.special-method
-  (#match? @keyword.other.special-method "^(raise|loop)$"))
+  method: (identifier) @keyword.other.special-method.ruby
+  (#match? @keyword.other.special-method.ruby "^(raise|loop)$"))
 
 ; Identifiers
 
@@ -351,7 +351,7 @@
   (heredoc_beginning)
 ] @string.unquoted.ruby
 
-((heredoc_body) @meta.embedded
+((heredoc_body) @meta.embedded.block.heredoc.ruby
   (#set! adjust.endAt lastChild.startPosition))
 
 
