@@ -14,7 +14,7 @@
     "tree-sitter"
   ],
   "engines": {
-    "atom": "*",
+    "lumine": "*",
     "node": ">=12"
   },
   "license": "MIT",
