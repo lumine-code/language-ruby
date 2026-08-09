@@ -4,8 +4,8 @@ const GRAMMAR_TEST_FILES = ["syntax.rb"];
 
 describe("Grammar tests", () => {
   beforeEach(async () => {
-    atom.config.set("language.useTreeSitterParsers", true);
-    await atom.packages.activatePackage("language-ruby");
+    lumine.config.set("language.useTreeSitterParsers", true);
+    await lumine.packages.activatePackage("language-ruby");
   });
 
   it("passes grammar tests", async () => {

@@ -2,8 +2,8 @@ const path = require("path");
 
 describe("WASM Tree-sitter Ruby grammar", () => {
   beforeEach(async () => {
-    await atom.packages.activatePackage("language-ruby");
-    atom.config.set("language.useTreeSitterParsers", true);
+    await lumine.packages.activatePackage("language-ruby");
+    lumine.config.set("language.useTreeSitterParsers", true);
   });
 
   it("tokenizes classes, methods and keywords", async () => {

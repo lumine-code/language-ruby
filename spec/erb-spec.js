@@ -2,11 +2,11 @@ describe("TextMate HTML (Ruby - ERB) grammar", () => {
   let grammar = null;
 
   beforeEach(() => {
-    atom.config.set("language.useTreeSitterParsers", false);
+    lumine.config.set("language.useTreeSitterParsers", false);
 
-    waitsForPromise(() => atom.packages.activatePackage("language-ruby"));
+    waitsForPromise(() => lumine.packages.activatePackage("language-ruby"));
 
-    runs(() => (grammar = atom.grammars.grammarForScopeName("text.html.erb")));
+    runs(() => (grammar = lumine.grammars.grammarForScopeName("text.html.erb")));
   });
 
   it("parses the grammar", () => {

@@ -2,11 +2,11 @@ const path = require("path");
 
 describe("Ruby grammars", () => {
   beforeEach(async () => {
-    await atom.packages.activatePackage("language-ruby");
+    await lumine.packages.activatePackage("language-ruby");
   });
 
   it("tokenizes the editor using TextMate parser", async () => {
-    atom.config.set("language.useTreeSitterParsers", false);
+    lumine.config.set("language.useTreeSitterParsers", false);
 
     await runGrammarTests(path.join(__dirname, "fixtures", "textmate-grammar.rb"), /#/);
   });

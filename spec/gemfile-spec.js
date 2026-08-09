@@ -2,11 +2,11 @@ describe("TextMate Gemfile grammar", () => {
   let grammar = null;
 
   beforeEach(() => {
-    atom.config.set("language.useTreeSitterParsers", false);
+    lumine.config.set("language.useTreeSitterParsers", false);
 
-    waitsForPromise(() => atom.packages.activatePackage("language-ruby"));
+    waitsForPromise(() => lumine.packages.activatePackage("language-ruby"));
 
-    runs(() => (grammar = atom.grammars.grammarForScopeName("source.ruby.gemfile")));
+    runs(() => (grammar = lumine.grammars.grammarForScopeName("source.ruby.gemfile")));
   });
 
   it("parses the grammar", () => {

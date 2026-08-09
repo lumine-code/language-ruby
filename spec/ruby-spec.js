@@ -2,11 +2,11 @@ describe("TextMate Ruby grammar", function () {
   let grammar = null;
 
   beforeEach(function () {
-    atom.config.set("language.useTreeSitterParsers", false);
+    lumine.config.set("language.useTreeSitterParsers", false);
 
-    waitsForPromise(() => atom.packages.activatePackage("language-ruby"));
+    waitsForPromise(() => lumine.packages.activatePackage("language-ruby"));
 
-    runs(() => (grammar = atom.grammars.grammarForScopeName("source.ruby")));
+    runs(() => (grammar = lumine.grammars.grammarForScopeName("source.ruby")));
   });
 
   it("parses the grammar", function () {
