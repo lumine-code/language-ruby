@@ -6,7 +6,7 @@ describe("Ruby grammars", () => {
   });
 
   it("tokenizes the editor using TextMate parser", async () => {
-    lumine.config.set("language.useTreeSitterParsers", false);
+    lumine.config.set("editor.useTreeSitterParsers", false);
 
     await runGrammarTests(path.join(__dirname, "fixtures", "textmate-grammar.rb"), /#/);
   });

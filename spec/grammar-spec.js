@@ -4,7 +4,7 @@ const GRAMMAR_TEST_FILES = ["syntax.rb"];
 
 describe("Grammar tests", () => {
   beforeEach(async () => {
-    lumine.config.set("language.useTreeSitterParsers", true);
+    lumine.config.set("editor.useTreeSitterParsers", true);
     await lumine.packages.activatePackage("language-ruby");
   });
 
