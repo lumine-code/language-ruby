@@ -24,6 +24,9 @@
     "lumine": "^1.0.0",
     "node": ">=24"
   },
+  "specPackages": [
+    "language-regex"
+  ],
   "license": "MIT",
   "repository": "https://github.com/lumine-code/language-ruby",
   "devDependencies": {

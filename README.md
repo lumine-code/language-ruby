@@ -4,7 +4,7 @@ Ruby language support.
 
 ## Features
 
-- **Grammars**: provides Tree-sitter grammars built from [tree-sitter-regex](https://github.com/tree-sitter/tree-sitter-regex) and [tree-sitter-ruby](https://github.com/tree-sitter/tree-sitter-ruby) and TextMate grammars derived from [atom/language-ruby](https://github.com/atom/language-ruby).
+- **Grammars**: provides a Tree-sitter grammar built from [tree-sitter-ruby](https://github.com/tree-sitter/tree-sitter-ruby).
 - **Syntax highlighting**: full grammar coverage for Ruby, ERB, Gemfiles, and embedded regular expressions.
 - **Snippets**: shortcuts for common Ruby constructs.
 
