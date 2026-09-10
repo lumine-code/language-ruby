@@ -193,11 +193,13 @@
 (super) @keyword.control.pseudo-method.ruby
 
 (block_parameter (identifier) @variable.parameter.function.block.ruby)
-(block_parameters (identifier) @variable.parameter.function.block.ruby)
-(destructured_parameter (identifier) @variable.parameter.function.ruby)
+((identifier) @variable.parameter.function.block.ruby
+  (#is? test.childOfType block_parameters))
+((identifier) @variable.parameter.function.ruby
+  (#is? test.childOfType "destructured_parameter method_parameters"))
 (hash_splat_parameter (identifier) @variable.parameter.function.splat.ruby)
-(lambda_parameters (identifier) @variable.parameter.function.lambda.ruby)
-(method_parameters (identifier) @variable.parameter.function.ruby)
+((identifier) @variable.parameter.function.lambda.ruby
+  (#is? test.childOfType lambda_parameters))
 (splat_parameter (identifier) @variable.parameter.function.splat.ruby)
 
 
@@ -241,65 +243,52 @@
 ; =======
 
 ; Single-quoted string 'foo'
-(
-  ; The anonymous nodes in the tree-sitter grammar are all called "\"" no
-  ; matter what the delimiter is. We can work around this by using `#match?`
-  ; predicates.
-  (string
-    "\"" @punctuation.definition.string.begin.ruby
-    (string_content)?
-    "\"" @punctuation.definition.string.end.ruby)
-  @string.quoted.single.ruby
-  (#match? @string.quoted.single.ruby "^'")
-  (#match? @string.quoted.single.ruby "'$")
+; The anonymous delimiter nodes in the parser are all called `"` regardless
+; of their text, so classify the parent from its constant-time edge children.
+((string) @string.quoted.single.ruby
+  (#is? test.textAt "firstChild '")
+  (#is? test.textAt "lastChild '")
   (#set! capture.final true))
 
 
 ; Double-quoted string "bar"
-(
-  (string
-    "\"" @punctuation.definition.string.begin.ruby
-    (string_content)?
-    "\"" @punctuation.definition.string.end.ruby)
-  @string.quoted.double.interpolated.ruby
-  (#match? @string.quoted.double.interpolated.ruby "^\"")
-  (#match? @string.quoted.double.interpolated.ruby "\"$")
+((string) @string.quoted.double.interpolated.ruby
+  (#is? test.textAt "firstChild \"")
+  (#is? test.textAt "lastChild \"")
   (#set! capture.final true))
 
 ; "Other" strings
-(
-  (string
-    "\"" @punctuation.definition.string.begin.ruby
-    (string_content)?
-    "\"" @punctuation.definition.string.end.ruby)
-  @string.quoted.other.ruby
-  (#match? @string.quoted.other.ruby "^%q")
+((string) @string.quoted.other.ruby
+  (#is? test.matchAt "firstChild ^%q")
   (#set! capture.final true))
 
-(
-  (string
-    "\"" @punctuation.definition.string.begin.ruby
-    (string_content)?
-    "\"" @punctuation.definition.string.end.ruby)
-  @string.quoted.other.interpolated.ruby
-  (#match? @string.quoted.other.interpolated.ruby "^%Q")
+((string) @string.quoted.other.interpolated.ruby
+  (#is? test.matchAt "firstChild ^%Q")
   (#set! capture.final true))
 
+((string) @string.quoted.other.ruby
+  (#set! capture.final true))
 
-(
-  (string
-    "\"" @punctuation.definition.string.begin.ruby
-    (string_content)?
-    "\"" @punctuation.definition.string.end.ruby)
-  @string.quoted.other.ruby
+("\"" @punctuation.definition.string.begin.ruby
+  (#is? test.childOfType string)
+  (#is? test.first true)
+  (#set! capture.final true))
+
+("\"" @punctuation.definition.string.end.ruby
+  (#is? test.childOfType string)
+  (#is? test.last true)
   (#set! capture.final true))
 
 ; Highlight the interpolation inside of a string.
-(
-  (interpolation
-    "#{" @punctuation.section.embedded.begin.ruby
-    "}" @punctuation.section.embedded.end.ruby)
-  @meta.embedded.line.interpolation.ruby)
+(interpolation) @meta.embedded.line.interpolation.ruby
+
+("#{" @punctuation.section.embedded.begin.ruby
+  (#is? test.childOfType interpolation)
+  (#is? test.first true))
+
+("}" @punctuation.section.embedded.end.ruby
+  (#is? test.childOfType interpolation)
+  (#is? test.last true))
 
 ; (
 ;   (
@@ -336,11 +325,14 @@
 ; ) @meta.embedded
 
 ; Backtick-delimited subshells like `\`ls ${foo}\``.
-(
-  (subshell
-    "`" @punctuation.definition.string.begin.ruby
-    (_)?
-    "`" @punctuation.definition.string.end.ruby)
+("`" @punctuation.definition.string.begin.ruby
+  (#is? test.childOfType subshell)
+  (#is? test.first true)
+  (#set! capture.final true))
+
+("`" @punctuation.definition.string.end.ruby
+  (#is? test.childOfType subshell)
+  (#is? test.last true)
   (#set! capture.final true))
 
 (subshell) @meta.embedded.line.subshell.ruby @string.quoted.subshell.interpolation.ruby
@@ -370,9 +362,11 @@
 
 
 (regex) @string.regexp.interpolated.ruby
-(regex "/" @punctuation.definition.begin.regexp.ruby
+("/" @punctuation.definition.begin.regexp.ruby
+  (#is? test.childOfType regex)
   (#is? test.first true))
-(regex "/" @punctuation.definition.end.regexp.ruby
+("/" @punctuation.definition.end.regexp.ruby
+  (#is? test.childOfType regex)
   (#is? test.last true))
 
 (escape_sequence) @constant.character.escape.ruby
@@ -395,7 +389,8 @@
 ; ========
 
 ((comment) @comment.line.number-sign.ruby
-  (#match? @comment.line.number-sign.ruby "^#"))
+  (#match? @comment.line.number-sign.ruby "^#")
+  (#set! adjust.endBeforeFirstMatchOf "\\r?$"))
 
 ; Scope the initial `#` of a line comment as punctuation.
 ((comment) @punctuation.definition.comment.ruby
@@ -542,50 +537,58 @@
   (#match? @punctuation.definition.begin.array.bracket.round.ruby "^%[a-z]\\("))
 
 ; Handle ending delimiter of `%w(`.
-((string_array ")" @punctuation.definition.end.array.bracket.round.ruby)
+((")" @punctuation.definition.end.array.bracket.round.ruby)
+  (#is? test.childOfType string_array)
   (#eq? @punctuation.definition.end.array.bracket.round.ruby ")"))
 
 ; Handle ending delimiter of `%i(`.
-((symbol_array ")" @punctuation.definition.end.array.bracket.round.ruby)
+((")" @punctuation.definition.end.array.bracket.round.ruby)
+  (#is? test.childOfType symbol_array)
   (#eq? @punctuation.definition.end.array.bracket.round.ruby ")"))
 
 ; Any character can be used as the delimiter for a special percent-something! For the rest we can define catch-alls.
 (["%w(" "%i("] @punctuation.definition.begin.array.ruby
   (#set! capture.shy true))
-((string_array ")" @punctuation.definition.end.array.ruby)
+((")" @punctuation.definition.end.array.ruby)
+  (#is? test.childOfType string_array)
   (#set! capture.shy true))
-((symbol_array ")" @punctuation.definition.end.array.ruby)
+((")" @punctuation.definition.end.array.ruby)
+  (#is? test.childOfType symbol_array)
   (#set! capture.shy true))
 
-(parenthesized_statements
- "(" @punctuation.definition.expression.begin.bracket.round.ruby
- ")" @punctuation.definition.expression.end.bracket.round.ruby)
+("(" @punctuation.definition.expression.begin.bracket.round.ruby
+  (#is? test.childOfType parenthesized_statements)
+  (#is? test.first true))
 
-(hash
- "{" @punctuation.definition.hash.begin.bracket.curly.ruby
- "}" @punctuation.definition.hash.end.bracket.curly.ruby)
+(")" @punctuation.definition.expression.end.bracket.round.ruby
+  (#is? test.childOfType parenthesized_statements)
+  (#is? test.last true))
 
-(hash_pattern
- "{" @punctuation.definition.hash.begin.bracket.curly.ruby
- "}" @punctuation.definition.hash.end.bracket.curly.ruby)
+("{" @punctuation.definition.hash.begin.bracket.curly.ruby
+  (#is? test.childOfType "hash hash_pattern")
+  (#is? test.first true))
+
+("}" @punctuation.definition.hash.end.bracket.curly.ruby
+  (#is? test.childOfType "hash hash_pattern")
+  (#is? test.last true))
 
 (block
  "{" @punctuation.definition.block.begin.bracket.curly.ruby
  "}" @punctuation.definition.block.end.bracket.curly.ruby)
 
 ; To distinguish them from the bitwise "|" operator.
-(block_parameters
-  "|" @punctuation.separator.parameters.begin.ruby
+("|" @punctuation.separator.parameters.begin.ruby
+  (#is? test.childOfType block_parameters)
   (#is? test.first true)
   (#set! capture.final true))
 
-(block_parameters
-  "|" @punctuation.separator.parameters.end.ruby
+("|" @punctuation.separator.parameters.end.ruby
+  (#is? test.childOfType block_parameters)
   (#is? test.last true)
   (#set! capture.final true))
 
-(block_parameters
-  "," @punctuation.separator.parameters.ruby
+("," @punctuation.separator.parameters.ruby
+  (#is? test.childOfType block_parameters)
   (#set! capture.final true))
 
 "=>" @punctuation.separator.key-value.ruby
