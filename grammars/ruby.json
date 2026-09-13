@@ -3,7 +3,7 @@
   "scopeName": "source.ruby",
   "type": "tree-sitter",
   "parser": "tree-sitter-ruby",
-  "injectionNames": ["rb", "ruby"],
+  "injectionNames": ["rb", "ruby", "jruby", "macruby", "rake", "rbx"],
   "treeSitter": {
     "parserSource": "github:tree-sitter/tree-sitter-ruby#v0.23.1",
     "wasmBuildTool": "tree-sitter-cli#v0.27.0",
