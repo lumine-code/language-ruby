@@ -18,12 +18,12 @@ describe("Ruby highlight query locality", () => {
     await editor.languageMode.ready;
   }
 
-  function captures() {
-    const layer = editor.languageMode.rootLanguageLayer;
-    return layer.queries.highlightsQuery.captures(layer.tree.rootNode, {
+  async function captures() {
+    const groups = await editor.getGrammarQueryCaptureGroups("highlightsQuery", {
       startPosition: new Point(2998, 0),
       endPosition: new Point(3004, 0),
     });
+    return groups.find(({ grammar }) => grammar === editor.getGrammar())?.captures ?? [];
   }
 
   it("keeps hash and block-parameter punctuation leaf-rooted", async () => {
@@ -60,13 +60,13 @@ describe("Ruby highlight query locality", () => {
     for (let i = 0; i < 6000; i++) hashLines.push(`  key_${i}: value_${i},`);
     hashLines.push("}");
     await setUp(hashLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const blockLines = ["foo do |"];
     for (let i = 0; i < 6000; i++) blockLines.push(`  value_${i}${i === 5999 ? "" : ","}`);
     blockLines.push("|", "end");
     await setUp(blockLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const methodLines = ["def benchmark("];
     for (let i = 0; i < 6000; i++) {
@@ -74,7 +74,7 @@ describe("Ruby highlight query locality", () => {
     }
     methodLines.push(")", "  nil", "end");
     await setUp(methodLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const lambdaLines = ["value = ->("];
     for (let i = 0; i < 6000; i++) {
@@ -82,36 +82,36 @@ describe("Ruby highlight query locality", () => {
     }
     lambdaLines.push(") { nil }");
     await setUp(lambdaLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const expressionLines = ["value = ("];
     for (let i = 0; i < 6000; i++) expressionLines.push(`  value_${i}`);
     expressionLines.push(")");
     await setUp(expressionLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const wordLines = ["value = %w("];
     for (let i = 0; i < 6000; i++) wordLines.push(`  value_${i}`);
     wordLines.push(")");
     await setUp(wordLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const stringLines = ['value = "'];
     for (let i = 0; i < 6000; i++) stringLines.push(`  line #{value_${i}}`);
     stringLines.push('"');
     await setUp(stringLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const subshellLines = ["value = `"];
     for (let i = 0; i < 6000; i++) subshellLines.push(`  line #{value_${i}}`);
     subshellLines.push("`");
     await setUp(subshellLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
 
     const interpolationLines = ['value = "#{'];
     for (let i = 0; i < 6000; i++) interpolationLines.push(`  value_${i}`);
     interpolationLines.push('}"');
     await setUp(interpolationLines.join("\r\n"));
-    expect(captures().length).toBeLessThanOrEqual(96);
+    expect((await captures()).length).toBeLessThanOrEqual(96);
   });
 });
