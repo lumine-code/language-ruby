@@ -19,11 +19,12 @@ describe("Ruby highlight query locality", () => {
   }
 
   async function captures() {
-    const groups = await editor.getGrammarQueryCaptureGroups("highlightsQuery", {
+    const capturesQuery = await editor.getGrammar().getQuery("highlightsQuery");
+    const queryRoot = editor.getSyntaxNodeAtBufferPosition([0, 0], (node) => !node.parent);
+    return capturesQuery.captures(queryRoot, {
       startPosition: new Point(2998, 0),
       endPosition: new Point(3004, 0),
     });
-    return groups.find(({ grammar }) => grammar === editor.getGrammar())?.captures ?? [];
   }
 
   it("keeps hash and block-parameter punctuation leaf-rooted", async () => {
