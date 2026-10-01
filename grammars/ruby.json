@@ -12,7 +12,8 @@
     "localsQuery": "ruby-locals.scm",
     "foldsQuery": "ruby-folds.scm",
     "indentsQuery": "ruby-indents.scm",
-    "tagsQuery": "ruby-tags.scm"
+    "tagsQuery": "ruby-tags.scm",
+    "injectionsQuery": "ruby-injections.scm"
   },
   "firstLineRegex": [
     // shebang line
