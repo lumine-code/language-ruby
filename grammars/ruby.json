@@ -5,7 +5,7 @@
   "parser": "tree-sitter-ruby",
   "injectionNames": ["rb", "ruby", "jruby", "macruby", "rake", "rbx"],
   "treeSitter": {
-    "parserSource": "github:tree-sitter/tree-sitter-ruby#v0.23.1",
+    "parserSource": "github:tree-sitter/tree-sitter-ruby#ad907a69da0c8a4f7a943a7fe012712208da6dee",
     "wasmBuildTool": "tree-sitter-cli#v0.27.0",
     "grammar": "ruby.wasm",
     "highlightsQuery": "ruby-highlights.scm",
