@@ -2,6 +2,8 @@
 
 Ruby language support.
 
+Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/language-ruby`).
+
 ## Features
 
 - **Grammars**: provides a Tree-sitter grammar built from [tree-sitter-ruby](https://github.com/tree-sitter/tree-sitter-ruby).
