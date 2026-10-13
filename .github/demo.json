@@ -1,0 +1,16 @@
+{
+  "title": "language-ruby",
+  "description": "Ruby syntax highlighting in the editor.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "a2491de819ab23ff93f752cf89421741c2a3093e",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "Ruby syntax highlighting at the default editor font size.",
+      "width": 1100,
+      "height": 538
+    }
+  ]
+}
