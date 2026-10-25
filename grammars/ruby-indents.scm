@@ -8,6 +8,12 @@
   (#set! capture.final true))
 (until_modifier "until" @_IGNORE_
   (#set! capture.final true))
+(rescue_modifier "rescue" @_IGNORE_
+  (#set! capture.final true))
+
+; The opening interpolation token is `#{`, not an indentation delimiter.
+; Its closing brace must not cancel an outer list or block on the same row.
+(interpolation "}" @_IGNORE_ (#set! capture.final true))
 
 
 [
