@@ -16,6 +16,7 @@ describe("Ruby highlight query locality", () => {
   async function setUp(text) {
     editor.setText(text);
     await editor.languageMode.ready;
+    await editor.languageMode.atTransactionEnd();
   }
 
   async function captures() {
