@@ -1,3 +1,17 @@
+; A complete inline block keeps its own row level, including ELSE/WHEN
+; branches that would otherwise count as extra unmatched opening keywords.
+([(class) (singleton_class) (method) (singleton_method) (module) (if) (unless) (case) (case_match) (while) (until) (for) (begin) (do_block)] @match.next
+  (#is? test.startsOnSameRowAs endPosition)
+  (#match? @match.next "\\bend$")
+  (#set! indent.match startPosition))
+
+; Reindent changes code structure, never the contents of multiline literals
+; or the alignment a user chose inside a block comment.
+([(string) (regex) (heredoc_body) (comment)] @preserve
+  (#is? indent.reindent true)
+  (#is-not? indent.matchesCurrentRow startPosition)
+  (#set! indent.force true))
+
 
 ; Prevent postfix modifiers from triggering indents on the next line.
 (unless_modifier "unless" @_IGNORE_
@@ -10,6 +24,14 @@
   (#set! capture.final true))
 (rescue_modifier "rescue" @_IGNORE_
   (#set! capture.final true))
+
+; Loop separators do not open a second block on the header row.
+(in "in" @_IGNORE_ (#set! capture.final true))
+(do "do" @_IGNORE_ (#set! capture.final true))
+
+; Endless methods have no following body to indent.
+(method "def" @_IGNORE_ "=" (#set! capture.final true))
+(singleton_method "def" @_IGNORE_ "=" (#set! capture.final true))
 
 ; The opening interpolation token is `#{`, not an indentation delimiter.
 ; Its closing brace must not cancel an outer list or block on the same row.
