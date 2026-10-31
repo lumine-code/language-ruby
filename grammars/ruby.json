@@ -17,7 +17,7 @@
   },
   "firstLineRegex": [
     // shebang line
-    "^#!.*\\b(w*ruby|rake)\\r?\\n",
+    "^#![ \\t]*(?:(?:[^\\s]+[\\\\/])?(?:ruby(?:[0-9.]+)?(?:\\.exe)?|rubyw(?:\\.exe)?|jruby|truffleruby|rake)|(?:[^\\s]+[\\\\/])?env(?:\\.exe)?[ \\t]+(?:-S[ \\t]+)?(?:ruby(?:[0-9.]+)?(?:\\.exe)?|rubyw(?:\\.exe)?|jruby|truffleruby|rake))(?:[ \\t\\r\\n]|$)",
     // vim modeline
     // Stop at the first Vim and set tokens instead of backtracking over them.
     // \x0a keeps existing shebang prefix line counts unchanged.
@@ -25,6 +25,11 @@
   ],
   "fileTypes": [
     "rb",
+    "rbi",
+    "Guardfile",
+    "Vagrantfile",
+    "Thorfile",
+    "Dangerfile",
     "ru",
     "rake",
     "gemspec",
