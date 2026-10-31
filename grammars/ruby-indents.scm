@@ -1,7 +1,25 @@
+; Branches inside a complete inline expression do not open another level.
+; Ignore only their own token so outer containers and later blocks still count.
+([(if (else "else" @_IGNORE_))
+  (unless (else "else" @_IGNORE_))
+  (case (when "when" @_IGNORE_))
+  (case (else "else" @_IGNORE_))
+  (case_match (in_clause "in" @_IGNORE_))
+  (case_match (else "else" @_IGNORE_))] @_inline
+  (#match? @_inline "^[^\n]*\\bend$")
+  (#set! capture.final true))
+
+; Unterminated quoted text can expose braces and keywords as ERROR children.
+; Only recovered quote tokens claim this row; complete strings do not.
+(ERROR ["\"" "`"] @match.next
+  (#set! indent.match startPosition))
+
 ; A complete inline block keeps its own row level, including ELSE/WHEN
 ; branches that would otherwise count as extra unmatched opening keywords.
 ([(class) (singleton_class) (method) (singleton_method) (module) (if) (unless) (case) (case_match) (while) (until) (for) (begin) (do_block)] @match.next
   (#is? test.startsOnSameRowAs endPosition)
+  (#is? test.firstTextOnRow)
+  (#is? test.lastTextOnRow)
   (#match? @match.next "\\bend$")
   (#set! indent.match startPosition))
 

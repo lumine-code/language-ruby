@@ -12,6 +12,14 @@ describe("Conservative ruby indentation", () => {
   afterEach(() => editor?.destroy());
 
   for (const [name, source, row, columns] of [
+    ["an unfinished quoted brace", 'value = "{', 0, 0],
+    ["a quote followed by text", 'value = "hello {', 0, 0],
+    ["an unfinished endless method string", 'def value = "{', 0, 0],
+    ["a closed string before a real opener", 'value = "ok"; values = [', 0, 4],
+    ["a clear unfinished container", "values = [", 0, 4],
+    ["an outer array beside an inline branch", "values = [if ready then 1 else 2 end,\n]", 0, 4],
+    ["a real block after an inline block", "if first; work; end; if second\nend", 0, 4],
+    ["a balanced array containing an inline branch", "values = [if ready then 1 else 2 end]", 0, 0],
     ["a complete for loop", "for item in [1]; puts item; end", 0, 0],
     ["a complete while loop", "while ready do work end", 0, 0],
     ["an endless method", "def value = 1", 0, 0],
